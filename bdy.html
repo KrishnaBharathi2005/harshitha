@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1a 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem 2rem;
+            border-radius: 28px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        h1 { 
+            margin-bottom: 1rem; 
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #a29bfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p { 
+            color: #b0b0b0; 
+            margin-bottom: 2rem; 
+            line-height: 1.6;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 1.5rem;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            color-scheme: dark;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 100%;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.4);
+            filter: brightness(1.1);
+        }
+
+        /* Video Play Button Styling */
+        .play-icon {
+            margin-right: 10px;
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        #error-msg {
+            color: #ff7675;
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: DOB ENTRY -->
+    <div id="lock-screen" class="container">
+        <div class="card" id="main-card">
+            <h1>Special Delivery 💌</h1>
+            <p>Enter your birth date to unlock the birthday vault.</p>
+            <input type="date" id="dob-input">
+            <button class="btn" onclick="unlock()">Unlock Surprise</button>
+            <p id="error-msg">That doesn't seem right. Try again! ❤️</p>
+        </div>
+    </div>
+
+    <!-- PAGE 2: THE PLAY BUTTON -->
+    <div id="wish-screen" class="container" style="display: none;">
+        <div class="card">
+            <h1 style="background: linear-gradient(135deg, #fab1a0, #ff7675); -webkit-background-clip: text;">Happy Birthday! ✨</h1>
+            <p>I've recorded a special video just for you. Click below to watch it!</p>
+            
+            <a href="https://drive.google.com/file/d/1TsIEJ4xwlitW3yeUZtrHxF8VyIxXORnm/view?usp=sharing" 
+               target="_blank" 
+               class="btn">
+                <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                Play Special Video
+            </a>
+            
+            <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">(Opens in a new tab)</p>
+        </div>
+    </div>
+
+    <script>
+        function unlock() {
+            const input = document.getElementById('dob-input').value;
+            const error = document.getElementById('error-msg');
+            const card = document.getElementById('main-card');
+            
+            // Correct Date: 13/05/2005
+            const secretDate = "2005-05-13";
+
+            if (input === secretDate) {
+                confetti({
+                    particleCount: 150,
+                    spread: 60,
+                    origin: { y: 0.6 },
+                    colors: ['#6c5ce7', '#fab1a0', '#ffffff']
+                });
+
+                setTimeout(() => {
+                    document.getElementById('lock-screen').style.display = 'none';
+                    document.getElementById('wish-screen').style.display = 'block';
+                }, 500);
+            } else {
+                error.style.display = 'block';
+                card.style.animation = 'none';
+                void card.offsetWidth; 
+                card.style.animation = 'shake 0.4s';
+            }
+        }
+    </script>
+</body>
+</html>
